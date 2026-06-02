@@ -21,30 +21,38 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "researchagent123")
 
 # Database configuration
 DATABASE_PATH = os.getenv("DATABASE_PATH", "users.db")
-conn = sqlite3.connect(DATABASE_PATH, check_same_thread=False)
 
-cursor = conn.cursor()
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS users(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT,
-    email TEXT UNIQUE,
-    password TEXT
-)
-""")
+def get_db():
+    """Get a thread-safe database connection."""
+    conn = sqlite3.connect(DATABASE_PATH, check_same_thread=False)
+    conn.row_factory = sqlite3.Row
+    return conn
 
-conn.commit()
+# Initialize database tables
+def init_db():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        email TEXT UNIQUE,
+        password TEXT
+    )
+    """)
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS searches(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT,
+        query TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+    conn.commit()
+    conn.close()
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS searches(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT,
-    query TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
-""")
+init_db()
 
-conn.commit()
 LAST_QUERY = ""
 LAST_RESULT = ""
 
@@ -76,7 +84,7 @@ def send_otp(receiver_email, otp):
         msg["From"] = SENDER_EMAIL
         msg["To"] = receiver_email
 
-        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
 
         server.starttls()
 
@@ -90,10 +98,12 @@ def send_otp(receiver_email, otp):
         server.quit()
 
         print("OTP SENT SUCCESSFULLY")
+        return True
 
     except Exception as e:
 
         print("EMAIL ERROR:", e)
+        return False
 
 
 @app.route("/")
@@ -110,7 +120,8 @@ def signup():
         session["email"] = request.form.get("email")
         session["password"] = request.form.get("password")
         try:
-
+            conn = get_db()
+            cursor = conn.cursor()
             cursor.execute(
                 "INSERT INTO users(username,email,password) VALUES(?,?,?)",
                 (
@@ -121,9 +132,10 @@ def signup():
             )
 
             conn.commit()
+            conn.close()
 
-        except:
-
+        except Exception as e:
+            print("SIGNUP DB ERROR:", e)
             return "Email Already Registered"
 
         session["otp"] = str(
@@ -170,12 +182,15 @@ def login():
         email = request.form.get("email")
         password = request.form.get("password")
 
+        conn = get_db()
+        cursor = conn.cursor()
         cursor.execute(
             "SELECT * FROM users WHERE email=? AND password=?",
             (email, password)
         )
 
         user = cursor.fetchone()
+        conn.close()
 
         if user:
 
@@ -270,6 +285,8 @@ def search():
         LAST_QUERY = query
         LAST_RESULT = result
 
+        conn = get_db()
+        cursor = conn.cursor()
         cursor.execute(
             "INSERT INTO searches(username,query) VALUES(?,?)",
             (
@@ -279,6 +296,7 @@ def search():
         )
 
         conn.commit()
+        conn.close()
         print("QUERY SAVED:", LAST_QUERY)
 
         return render_template(
@@ -357,6 +375,8 @@ def download_pdf():
 @app.route("/history")
 def history():
 
+    conn = get_db()
+    cursor = conn.cursor()
     cursor.execute(
     """
     SELECT id, query, created_at
@@ -368,6 +388,7 @@ def history():
 )
 
     history_data = cursor.fetchall()
+    conn.close()
 
     return render_template(
         "history.html",
@@ -377,16 +398,18 @@ def history():
 @app.route("/delete_history/<int:id>")
 def delete_history(id):
 
+    conn = get_db()
+    cursor = conn.cursor()
     cursor.execute(
         "DELETE FROM searches WHERE id=?",
         (id,)
     )
 
     conn.commit()
+    conn.close()
 
     return redirect("/history")
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     app.run(debug=True, port=port)
-
