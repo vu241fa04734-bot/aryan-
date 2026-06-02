@@ -1,1 +1,1 @@
-web: gunicorn --chdir project app:app
+web: gunicorn --chdir project --bind 0.0.0.0:$PORT app:app
