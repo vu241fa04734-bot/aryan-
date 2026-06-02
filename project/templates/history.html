@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Search History</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+
+min-height:100vh;
+
+background:
+linear-gradient(
+rgba(0,0,0,.80),
+rgba(0,0,0,.80)),
+url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1920&q=80");
+
+background-size:cover;
+background-position:center;
+background-attachment:fixed;
+
+color:white;
+padding:40px;
+}
+
+.container{
+
+max-width:1100px;
+margin:auto;
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(15px);
+
+border-radius:25px;
+
+padding:40px;
+
+box-shadow:0 8px 30px rgba(0,0,0,.4);
+}
+
+.header{
+
+text-align:center;
+
+margin-bottom:35px;
+}
+
+.header h1{
+
+font-size:45px;
+
+color:#00bfff;
+
+margin-bottom:10px;
+}
+
+.header p{
+
+color:#ddd;
+}
+
+.card{
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(10px);
+
+padding:22px;
+
+margin-bottom:15px;
+
+border-radius:15px;
+
+font-size:18px;
+
+transition:.3s;
+}
+
+.card:hover{
+
+transform:translateY(-4px);
+
+box-shadow:0 5px 20px rgba(0,191,255,.3);
+}
+.card .btn{
+
+background:#ff4d4d;
+
+padding:10px 18px;
+
+border-radius:8px;
+
+text-decoration:none;
+
+color:white;
+}
+
+.card .btn:hover{
+
+background:#ff1a1a;
+}
+
+.card i{
+
+color:#00bfff;
+
+margin-right:10px;
+}
+
+.buttons{
+
+text-align:center;
+
+margin-top:30px;
+}
+
+.btn{
+
+display:inline-block;
+
+padding:14px 25px;
+
+background:#00bfff;
+
+color:white;
+
+text-decoration:none;
+
+border-radius:10px;
+
+font-weight:bold;
+
+transition:.3s;
+}
+
+.btn:hover{
+
+background:#0099ff;
+
+transform:translateY(-2px);
+}
+
+.empty{
+
+text-align:center;
+
+font-size:18px;
+
+color:#ccc;
+
+margin-top:30px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<h1>
+<i class="fa-solid fa-clock-rotate-left"></i>
+ Search History
+</h1>
+
+<p>
+All Previously Searched Research Topics
+</p>
+
+</div>
+
+{% if history %}
+
+{% for item in history %}
+
+<div class="card">
+
+<h3>
+<i class="fa-solid fa-magnifying-glass"></i>
+{{ item[1] }}
+</h3>
+
+<br>
+
+<p>
+<i class="fa-solid fa-calendar"></i>
+{{ item[2] }}
+</p>
+
+<br>
+
+<a href="/delete_history/{{ item[0] }}"
+class="btn">
+
+<i class="fa-solid fa-trash"></i>
+
+Delete
+
+</a>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<div class="empty">
+
+No Search History Available
+
+</div>
+
+{% endif %}
+
+<div class="buttons">
+
+<a href="/dashboard" class="btn">
+
+<i class="fa-solid fa-arrow-left"></i>
+
+ Back To Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+</body>
+</html>

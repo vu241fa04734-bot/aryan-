@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Two-Step Verification</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+
+background:
+linear-gradient(rgba(0,0,0,.75),
+rgba(0,0,0,.75)),
+url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1920&q=80");
+
+background-size:cover;
+background-position:center;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+font-family:Segoe UI;
+}
+
+.card{
+
+width:400px;
+
+padding:40px;
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(15px);
+
+border-radius:20px;
+
+color:white;
+
+text-align:center;
+}
+
+input{
+
+width:100%;
+
+padding:14px;
+
+margin-top:20px;
+
+border:none;
+
+border-radius:10px;
+}
+
+button{
+
+width:100%;
+
+padding:14px;
+
+margin-top:20px;
+
+border:none;
+
+border-radius:10px;
+
+background:#00bfff;
+
+color:white;
+
+font-size:16px;
+
+cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Two-Step Verification</h1>
+
+<p>Enter the OTP sent to your account</p>
+
+<form method="POST">
+
+<input
+type="text"
+name="otp"
+placeholder="Enter OTP"
+required>
+
+<button type="submit">
+Verify OTP
+</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+
+height:100vh;
+
+background:
+linear-gradient(
+rgba(0,0,0,.75),
+rgba(0,0,0,.75)),
+url("https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=1920&q=80");
+
+background-size:cover;
+background-position:center;
+
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.card{
+
+width:450px;
+
+padding:40px;
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(15px);
+
+border-radius:20px;
+
+box-shadow:0 8px 32px rgba(0,0,0,.5);
+
+color:white;
+}
+
+h1{
+text-align:center;
+margin-bottom:10px;
+}
+
+.subtitle{
+text-align:center;
+color:#ddd;
+margin-bottom:25px;
+}
+
+.input-group{
+position:relative;
+margin-bottom:18px;
+}
+
+.input-group input{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+outline:none;
+
+border-radius:10px;
+
+background:rgba(255,255,255,.12);
+
+color:white;
+
+font-size:15px;
+}
+
+.input-group input::placeholder{
+color:#ddd;
+}
+
+.eye{
+
+position:absolute;
+
+right:15px;
+
+top:15px;
+
+cursor:pointer;
+}
+
+button{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:10px;
+
+background:#00bfff;
+
+color:white;
+
+font-size:16px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+transition:.3s;
+}
+
+button:hover{
+
+background:#0099ff;
+
+transform:translateY(-2px);
+}
+
+.login-link{
+
+text-align:center;
+
+margin-top:20px;
+}
+
+.login-link a{
+
+color:#00bfff;
+
+text-decoration:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>Create Account</h1>
+
+<p class="subtitle">
+NexusResearch
+</p>
+
+<form method="POST">
+
+<div class="input-group">
+<input
+type="text"
+name="username"
+placeholder="Username"
+required>
+</div>
+
+<div class="input-group">
+<input
+type="email"
+name="email"
+placeholder="Email Address"
+required>
+</div>
+
+<div class="input-group">
+
+<input
+type="password"
+id="password"
+name="password"
+placeholder="Password"
+required>
+
+<span
+class="eye"
+onclick="togglePassword()">
+
+<i
+id="eyeIcon"
+class="fa-solid fa-eye"></i>
+
+</span>
+
+</div>
+
+<div class="input-group">
+<input
+type="password"
+name="confirm_password"
+placeholder="Confirm Password"
+required>
+</div>
+
+<button type="submit">
+Generate OTP
+</button>
+
+</form>
+
+<div class="login-link">
+
+Already have an account?
+
+<a href="/login">
+Login
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+function togglePassword(){
+
+let pass =
+document.getElementById("password");
+
+let eye =
+document.getElementById("eyeIcon");
+
+if(pass.type==="password"){
+
+pass.type="text";
+
+eye.className=
+"fa-solid fa-eye-slash";
+
+}
+else{
+
+pass.type="password";
+
+eye.className=
+"fa-solid fa-eye";
+}
+}
+
+</script>
+
+</body>
+</html>
